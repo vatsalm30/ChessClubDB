@@ -12,4 +12,4 @@ pages = {
 }
 
 if __name__ == "__main__":
-    Gui(pages=pages, libraries=[ChessLibrary()]).run(title="Taipy Chess!", dark_mode=True)
+    Gui(pages=pages, libraries=[ChessLibrary()]).run(title="Chess Club DB", dark_mode=True)

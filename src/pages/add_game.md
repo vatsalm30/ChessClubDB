@@ -1,5 +1,7 @@
 # Add A New Game
 
+## Game Moves
+<|{gameLen}|chess_library.addGame|>
 
 ## Players
 <|layout|columns=300px 1fr 50px|

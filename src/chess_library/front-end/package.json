@@ -25,7 +25,9 @@
   },
   "dependencies": {
     "chess.js": "^1.0.0-beta.8",
+    "prettier": "^3.3.3",
     "react": "^18.2.0",
+    "react-chessboard": "^4.6.0",
     "taipy-gui": "file:../../../../../AppData/Local/Packages/PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0/LocalCache/local-packages/Python312/site-packages/taipy/gui/webapp"
   },
   "scripts": {

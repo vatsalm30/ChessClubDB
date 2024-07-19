@@ -8,10 +8,10 @@ class ChessLibrary(ElementLibrary):
                  {"data": ElementProperty(PropertyType.dynamic_string)},
                 react_component="ChessBoard",
             ),
-            "heatmap": Element(
-                "data", 
-                 {"data": ElementProperty(PropertyType.dynamic_string)},
-                react_component="HeatMap",
+            "addGame": Element(
+                "gameLen", 
+                {"gameLen": ElementProperty(PropertyType.dynamic_number)},
+                react_component="AddChessGame",
             )
         }
 
