@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 
-import { Chess } from "chess.js";
+import { Chess, Move as ChessMove } from "chess.js";
 
 import styles from "./MoveAdder.module.css";
 
@@ -8,19 +8,20 @@ interface MoveProps {
   index: number;
   move: string;
   onChange: (move: string) => void;
+  failIndex: boolean;
 }
 
-const Move = ({ index, move, onChange }: MoveProps) => {
-  const [selected, setSelected] = useState(false);
+const chess = new Chess();
+
+const Move = ({ index, move, onChange, failIndex }: MoveProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
   return (
     <div
       key={`move-${index}`}
       onClick={() => {
-        setSelected(!selected);
         inputRef.current?.focus();
       }}
-      className={selected ? styles.selected : styles.move}
+      className={failIndex ? styles.fail : styles.move}
     >
       <input ref={inputRef} type="text" style={{ background: "none", border: "none", width: "55px", "color": "white", fontSize: "18px" }} value={move} onChange={(e) => onChange(e.target.value)}/>
     </div>
@@ -28,39 +29,46 @@ const Move = ({ index, move, onChange }: MoveProps) => {
 };
 
 interface MoveAdderProps {
-  index: number;
-  setIndex: (index: number) => void;
-  setMoves: (moves: string[]) => void;
+  setHistory: (history: ChessMove) => void;
 }
 
-const chess = new Chess();
-
-const MoveAdder = ({ index, setIndex, setMoves }: MoveAdderProps) => {
-  const [movesArray, setMovesArray] = useState(["e4", "e5"]);
+const MoveAdder = ({ setHistory }: MoveAdderProps) => {
+  const [movesArray, setMovesArray] = useState(["e4", ""]);
+  const [failIndex, setFailIndex] = useState<number>(-1);
 
   useEffect(() => {
-    setMoves(movesArray);
+    chess.load("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+    let breakLoop = false;
+    movesArray.forEach((move, index) => {
+      if(!breakLoop)
+      {
+        try{
+          setHistory(chess.move(move));
+        }catch{
+          setFailIndex(index);
+          breakLoop = true;
+        }
+      }
+    })
+
+    if(!breakLoop)
+    {
+      setFailIndex(-1);
+      setMovesArray([...movesArray, ""]);
+    }
   }, [movesArray]);
 
   const onMoveUpdate = (moveIndex: number, move: string) => {
     let newMovesArray = [...movesArray];
-    
-    chess.load("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
 
     newMovesArray[moveIndex] = move;
-
-    if(newMovesArray[newMovesArray.length - 1] !== "")
-    {
-        newMovesArray.push("");
-    }
 
     while(newMovesArray[newMovesArray.length - 1] === "" && newMovesArray[newMovesArray.length - 2] === "")
     {
         newMovesArray.splice(newMovesArray.length - 1);
     }
-
+    
     setMovesArray(newMovesArray);
-    setMoves(newMovesArray);
   };
 
   return (
@@ -102,12 +110,14 @@ const MoveAdder = ({ index, setIndex, setMoves }: MoveAdderProps) => {
                 index={i * 2}
                 move={movesArray[i * 2]}
                 onChange={(move) => onMoveUpdate(i * 2, move)}
+                failIndex={failIndex == i * 2 && movesArray[i * 2] !== ""}
               />
               {i * 2 + 1 < movesArray.length && (
                 <Move
                   index={i * 2 + 1}
                   move={movesArray[i * 2 + 1]}
                   onChange={(move) => onMoveUpdate(i * 2 + 1, move)}
+                  failIndex={failIndex == i * 2 + 1 && movesArray[i * 2 + 1] !== ""}
                 />
               )}
             </div>

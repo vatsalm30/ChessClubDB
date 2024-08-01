@@ -79,7 +79,6 @@ const ChessBoard = (props: ChessBoardProps) => {
         history.push(chess.move(move));
       });
     }
-    console.log(history);
     setHistory(history);
   }, [chessData]);
 
