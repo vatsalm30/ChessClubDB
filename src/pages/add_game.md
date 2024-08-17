@@ -26,3 +26,7 @@ Game Winner: <br/>
 Victory Status: <br/>
 <|{victoryStatus}|lov={gameStausOptions}|toggle|on_change=onChangeVictoryStatus|><br/><br/>
 |>
+
+<br/><br/>
+
+<|Add Game|on_action=add_game_to_csv|button|>
