@@ -7,3 +7,5 @@
 * Adding player elo and rankings
 
 ### [Hosted on AWS](http://3.12.134.143:5000/Games)
+
+### [LICENSE](LICENSE)

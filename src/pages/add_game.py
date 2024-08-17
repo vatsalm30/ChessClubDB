@@ -2,6 +2,7 @@ from typing import List
 import pandas as pd
 from taipy.gui import  Markdown, State
 from data.data import GAME_DATA
+import csv
 
 # Initialize the variables
 whitePlayerID = ""
@@ -33,8 +34,8 @@ def onChangeVictoryStatus(state: State):
     if state.victoryStatus == "Draw":
         state.gameWinner = "Draw"
 def add_game_to_csv(state: State):
-    new_row = pd.Series([0, len(state.gameMoves), state.victoryStatus, state.gameWinner, state.whitePlayerID, 1000, state.blackPlayerID, 1000, state.gameMoves], index=GAME_DATA.columns)
-    GAME_DATA.add(new_row)
-    print(GAME_DATA)
+    with open("src/data/games.csv", "a") as csv_file:
+        writer = csv.writer(csv_file)
+        writer.writerow([state.whitePlayerID, state.blackPlayerID, state.gameTime, state.gameWinner, state.victoryStatus, state.gameMoves])
 
 add_game = Markdown("src/pages/add_game.md")
