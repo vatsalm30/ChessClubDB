@@ -35,6 +35,7 @@ interface MoveAdderProps {
 const MoveAdder = ({ setHistory }: MoveAdderProps) => {
   const [movesArray, setMovesArray] = useState(["e4", ""]);
   const [failIndex, setFailIndex] = useState<number>(-1);
+  const [test, setTest] = useState();
 
   useEffect(() => {
     chess.load("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");

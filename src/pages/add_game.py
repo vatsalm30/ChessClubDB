@@ -1,8 +1,8 @@
 from typing import List
 import pandas as pd
 from taipy.gui import  Markdown, State
-from data.data import GAME_DATA
 import csv
+import json
 
 # Initialize the variables
 whitePlayerID = ""
@@ -34,8 +34,23 @@ def onChangeVictoryStatus(state: State):
     if state.victoryStatus == "Draw":
         state.gameWinner = "Draw"
 def add_game_to_csv(state: State):
-    with open("src/data/games.csv", "a") as csv_file:
+    dataTransferDict = {
+        "chessData": [],
+    }
+    
+    with open("src/api_layer/apiTransfer.json", "r") as json_file:
+        dataTransferDict = json.load(json_file)
+
+    with open("src/api_layer/apiTransfer.json", "w") as json_file:
+        dataTransferDict = {
+            "chessData": [],
+        }
+        json.dump(dataTransferDict, json_file)
+
+    with open("src/data/games.csv", "a", newline='\n') as csv_file:
         writer = csv.writer(csv_file)
-        writer.writerow([state.whitePlayerID, state.blackPlayerID, state.gameTime, state.gameWinner, state.victoryStatus, state.gameMoves])
+                       # id,turns,victory_status,winner,white_id,white_rating,black_id,black_rating,moves
+        writer.writerow(["id", len(state.gameMoves) // 2, state.victoryStatus, state.gameWinner, state.whitePlayerID, 0, state.blackPlayerID, 0, state.gameMoves])
+        csv_file.close()
 
 add_game = Markdown("src/pages/add_game.md")
